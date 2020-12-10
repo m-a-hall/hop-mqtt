@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.phalanxdev</groupId>
+  <artifactId>hop-mqtt</artifactId>
+  <version>1.0</version>
+  <name>Streaming MQTT transforms  Apache Hop</name>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <hop.version>0.50-SNAPSHOT</hop.version>
+    <paho.version>1.2.0</paho.version>
+    <buildId>${maven.build.timestamp}</buildId>
+    <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.hop</groupId>
+      <artifactId>hop-engine</artifactId>
+      <version>${hop.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hop</groupId>
+      <artifactId>hop-core</artifactId>
+      <version>${hop.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hop</groupId>
+      <artifactId>hop-ui-swt</artifactId>
+      <version>${hop.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.swt</groupId>
+      <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+      <version>4.3</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.paho</groupId>
+      <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+      <version>${paho.version}</version>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo1.maven.org/maven2/</url>
+      <name>Maven Central</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>  
+  
+  <build>
+    <resources>
+      <resource>
+	<targetPath>${project.build.outputDirectory}</targetPath>
+	<directory>${project.build.sourceDirectory}</directory>
+	<includes>
+	  <include>**/*.properties</include>
+	  <include>**/*.png</include>
+	  <include>**/*.svg</include>
+	</includes>
+      </resource>
+    </resources>
+    
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+	<artifactId>maven-dependency-plugin</artifactId>
+	<executions>
+	  <execution>
+	    <phase>package</phase>
+	    <goals>
+	      <goal>copy-dependencies</goal>
+	    </goals>
+	    <configuration>
+	      <outputDirectory>${project.build.directory}/lib</outputDirectory>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+      
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-assembly-plugin</artifactId>
+	<configuration>
+	  <descriptor>assembly.xml</descriptor>
+	  <finalName>${project.artifactId}-${project.version}</finalName>
+	  <archiverConfig>
+	    <fileMode>0644</fileMode>
+	    <directoryMode>0755</directoryMode>
+	    <defaultDirectoryMode>0755</defaultDirectoryMode>
+	  </archiverConfig>
+	</configuration>
+	<executions>
+	  <execution>
+	    <phase>package</phase>
+	    <goals>
+	      <goal>single</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+    </plugins>
+    
+    <pluginManagement>
+      <plugins>
+	<!-- Ignore/Execute plugin execution -->
+	<plugin>
+	  <groupId>org.eclipse.m2e</groupId>
+	  <artifactId>lifecycle-mapping</artifactId>
+	  <version>1.0.0</version>
+	  <configuration>
+	    <lifecycleMappingMetadata>
+	      <pluginExecutions>
+		<!-- copy-dependency plugin -->
+		<pluginExecution>
+		  <pluginExecutionFilter>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-dependency-plugin</artifactId>
+		    <versionRange>[1.0.0,)</versionRange>
+		    <goals>
+		      <goal>copy-dependencies</goal>
+		    </goals>
+		  </pluginExecutionFilter>
+		  <action>
+		    <ignore />
+		  </action>
+		</pluginExecution>
+	      </pluginExecutions>
+	    </lifecycleMappingMetadata>
+	  </configuration>
+	</plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
