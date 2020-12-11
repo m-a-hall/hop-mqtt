@@ -91,7 +91,7 @@ public class MQTTSubscriber extends BaseTransform<MQTTSubscriberMeta, MQTTSubscr
         m_data.m_outputRowMeta = new RowMeta();
 
         m_meta.getFields( m_data.m_outputRowMeta, getTransformName(), null, null,
-            getPipelineMeta(), getMetadataProvider() );
+            variables, getMetadataProvider() );
       }
 
       if ( m_reconnectFailed ) {
@@ -192,12 +192,12 @@ public class MQTTSubscriber extends BaseTransform<MQTTSubscriberMeta, MQTTSubscr
 
   protected void configureConnection( MQTTSubscriberMeta meta, MQTTSubscriberData data ) throws HopException {
     if ( data.m_client == null ) {
-	  String broker = environmentSubstitute( meta.getBroker() );
+	  String broker = resolve( meta.getBroker() );
       if ( org.apache.hop.core.util.Utils.isEmpty( broker ) ) {
         throw new HopException(
             BaseMessages.getString( MQTTPublisherMeta.PKG, "MQTTClientStep.Error.NoBrokerURL" ) );
       }
-      String clientId = environmentSubstitute( meta.getClientId() );
+      String clientId = resolve( meta.getClientId() );
       if ( org.apache.hop.core.util.Utils.isEmpty( clientId ) ) {
         throw new HopException( BaseMessages.getString( MQTTPublisherMeta.PKG, "MQTTClientStep.Error.NoClientID" ) );
       }
@@ -207,10 +207,10 @@ public class MQTTSubscriber extends BaseTransform<MQTTSubscriberMeta, MQTTSubscr
       }
       List<String> resolvedTopics = new ArrayList<>();
       for ( String topic : topics ) {
-        resolvedTopics.add( environmentSubstitute( topic ) );
+        resolvedTopics.add( resolve( topic ) );
       }
 
-      String qosS = environmentSubstitute( meta.getQoS() );
+      String qosS = resolve( meta.getQoS() );
       int qos = 0;
       if ( !org.apache.hop.core.util.Utils.isEmpty( qosS ) ) {
         try {
@@ -238,14 +238,14 @@ public class MQTTSubscriber extends BaseTransform<MQTTSubscriberMeta, MQTTSubscr
 		else data.m_client = new MqttClient( broker, clientId);
         MqttConnectOptions connectOptions = new MqttConnectOptions();
         if ( meta.isRequiresAuth() ) {
-          connectOptions.setUserName( environmentSubstitute( meta.getUsername() ) );
-          connectOptions.setPassword( environmentSubstitute( meta.getPassword() ).toCharArray() );
+          connectOptions.setUserName( resolve( meta.getUsername() ) );
+          connectOptions.setPassword( resolve( meta.getPassword() ).toCharArray() );
         }
         if ( broker.startsWith( "ssl:" ) || broker.startsWith( "wss:" ) ) {
           connectOptions.setSocketFactory( SSLSocketFactoryGenerator
-              .getSocketFactory( environmentSubstitute( meta.getSSLCaFile() ),
-                  environmentSubstitute( meta.getSSLCertFile() ), environmentSubstitute( meta.getSSLKeyFile() ),
-                  environmentSubstitute( meta.getSSLKeyFilePass() ) ) );
+              .getSocketFactory( resolve( meta.getSSLCaFile() ),
+                  resolve( meta.getSSLCertFile() ), resolve( meta.getSSLKeyFile() ),
+                  resolve( meta.getSSLKeyFilePass() ) ) );
         }
 		
 		
@@ -254,8 +254,8 @@ public class MQTTSubscriber extends BaseTransform<MQTTSubscriberMeta, MQTTSubscr
 		logBasic( BaseMessages
             .getString( MQTTPublisherMeta.PKG, "MQTTClientStep.CreateMQTTClient.MessageEarly", broker, clientId,Boolean.toString(isCleanSession) ) );
 
-        String timeout = environmentSubstitute( meta.getTimeout() );
-        String keepAlive = environmentSubstitute( meta.getKeepAliveInterval() );
+        String timeout = resolve( meta.getTimeout() );
+        String keepAlive = resolve( meta.getKeepAliveInterval() );
         try {
           connectOptions.setConnectionTimeout( Integer.parseInt( timeout ) );
         } catch ( NumberFormatException e ) {

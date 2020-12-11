@@ -71,12 +71,12 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
   
   protected void configureConnection( MQTTPublisherMeta meta, MQTTPublisherData data ) throws HopException {
     if ( data.m_client == null ) {
-      String broker = environmentSubstitute( meta.getBroker() );
+      String broker = resolve( meta.getBroker() );
       if ( org.apache.hop.core.util.Utils.isEmpty( broker ) ) {
         throw new HopException(
             BaseMessages.getString( MQTTPublisherMeta.PKG, "MQTTClientStep.Error.NoBrokerURL" ) );
       }
-      String clientId = environmentSubstitute( meta.getClientId() );
+      String clientId = resolve( meta.getClientId() );
       if ( org.apache.hop.core.util.Utils.isEmpty( clientId ) ) {
         throw new HopException( BaseMessages.getString( MQTTPublisherMeta.PKG, "MQTTClientStep.Error.NoClientID" ) );
       }
@@ -86,14 +86,14 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
 
         MqttConnectOptions connectOptions = new MqttConnectOptions();
         if ( meta.isRequiresAuth() ) {
-          connectOptions.setUserName( environmentSubstitute( meta.getUsername() ) );
-          connectOptions.setPassword( environmentSubstitute( meta.getPassword() ).toCharArray() );
+          connectOptions.setUserName( resolve( meta.getUsername() ) );
+          connectOptions.setPassword( resolve( meta.getPassword() ).toCharArray() );
         }
         if ( broker.startsWith( "ssl:" ) || broker.startsWith( "wss:" ) ) {
           connectOptions.setSocketFactory( SSLSocketFactoryGenerator
-              .getSocketFactory( environmentSubstitute( meta.getSSLCaFile() ),
-                  environmentSubstitute( meta.getSSLCertFile() ), environmentSubstitute( meta.getSSLKeyFile() ),
-                  environmentSubstitute( meta.getSSLKeyFilePass() ) ) );
+              .getSocketFactory( resolve( meta.getSSLCaFile() ),
+                  resolve( meta.getSSLCertFile() ), resolve( meta.getSSLKeyFile() ),
+                  resolve( meta.getSSLKeyFilePass() ) ) );
         }
 		connectOptions.setCleanSession( meta.isCleanSession() ); //adding cleanSession Managmeent
         String lwTopic=meta.getLastWillTopic();
@@ -102,7 +102,7 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
 		{
 		connectOptions.setWill(meta.getLastWillTopic(),meta.getLastWillMessage().getBytes(),0,meta.isLastWillRetained());//adding Lastwill
 		}
-        String timeout = environmentSubstitute( meta.getTimeout() );
+        String timeout = resolve( meta.getTimeout() );
         try {
           connectOptions.setConnectionTimeout( Integer.parseInt( timeout ) );
         } catch ( NumberFormatException e ) {
@@ -140,7 +140,7 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
       data.m_outputRowMeta = getInputRowMeta().clone();
       m_meta.getFields( m_data.m_outputRowMeta, getTransformName(), null, null, this, getMetadataProvider() );
 
-      String inputField = environmentSubstitute( meta.getField() );
+      String inputField = resolve( meta.getField() );
 
       int numErrors = 0;
       if ( org.apache.hop.core.util.Utils.isEmpty( inputField ) ) {
@@ -160,7 +160,7 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
         return false;
       }
       data.m_inputFieldMeta = inputRowMeta.getValueMeta( data.m_inputFieldNr );
-      data.m_topic = environmentSubstitute( meta.getTopic() );
+      data.m_topic = resolve( meta.getTopic() );
       if ( meta.getTopicIsFromField() ) {
         data.m_topicFromFieldIndex = inputRowMeta.indexOfValue( data.m_topic );
         if ( data.m_topicFromFieldIndex < 0 ) {
@@ -173,7 +173,7 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
         }
       }
 
-      String qosValue = environmentSubstitute( meta.getQoS() );
+      String qosValue = resolve( meta.getQoS() );
       try {
         data.m_qos = Integer.parseInt( qosValue );
         if ( data.m_qos < 0 || data.m_qos > 2 ) {
@@ -195,7 +195,7 @@ public class MQTTPublisher extends BaseTransform<MQTTPublisherMeta, MQTTPublishe
           return true;
         }
 
-        // String topic = environmentSubstitute( meta.getTopic() );
+        // String topic = resolve( meta.getTopic() );
 
         if ( meta.getTopicIsFromField() ) {
           if ( r[data.m_topicFromFieldIndex] == null || org.apache.hop.core.util.Utils.isEmpty( r[data.m_topicFromFieldIndex].toString() ) ) {

@@ -28,6 +28,7 @@ import org.apache.hop.core.exception.HopTransformException;
 import org.apache.hop.core.row.IRowMeta;
 import org.apache.hop.core.row.RowMeta;
 import org.apache.hop.core.util.Utils;
+import org.apache.hop.core.variables.IVariables;
 import org.apache.hop.i18n.BaseMessages;
 import org.apache.hop.pipeline.PipelineMeta;
 import org.apache.hop.pipeline.transform.BaseTransformMeta;
@@ -105,18 +106,18 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
   private TextVar m_wKeyFile;
   private TextVar m_wKeyPassword;
 
-  public MQTTPublisherDialog( Shell parent, Object in, PipelineMeta tr, String sname ) {
-    super( parent, (BaseTransformMeta) in, tr, sname );
+  public MQTTPublisherDialog( Shell parent, IVariables variables, Object in, PipelineMeta tr, String sname ) {
+    super( parent, variables, (BaseTransformMeta) in, tr, sname );
     producerMeta = (MQTTPublisherMeta) in;
   }
 
-  public MQTTPublisherDialog( Shell parent, BaseTransformMeta baseTransformMeta, PipelineMeta pipelineMeta, String transformName ) {
-    super( parent, baseTransformMeta, pipelineMeta, transformName );
+  public MQTTPublisherDialog( Shell parent, IVariables variables, BaseTransformMeta baseTransformMeta, PipelineMeta pipelineMeta, String transformName ) {
+    super( parent, variables, baseTransformMeta, pipelineMeta, transformName );
     producerMeta = (MQTTPublisherMeta) baseTransformMeta;
   }
 
-  public MQTTPublisherDialog( Shell parent, int nr, BaseTransformMeta in, PipelineMeta tr ) {
-    super( parent, nr, in, tr );
+  public MQTTPublisherDialog( Shell parent, int nr, IVariables variables, BaseTransformMeta in, PipelineMeta tr ) {
+    super( parent, nr, variables, in, tr );
     producerMeta = (MQTTPublisherMeta) in;
   }
 
@@ -205,7 +206,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlBroker.left = new FormAttachment( 0, 0 );
     fdlBroker.right = new FormAttachment( middle, -margin );
     wlBroker.setLayoutData( fdlBroker );
-    m_wBroker = new TextVar( pipelineMeta, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wBroker = new TextVar( variables, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     props.setLook( m_wBroker );
     m_wBroker.addModifyListener( lsMod );
     FormData fdBroker = new FormData();
@@ -299,7 +300,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlClientID.left = new FormAttachment( 0, 0 );
     fdlClientID.right = new FormAttachment( middle, -margin );
     wlClientID.setLayoutData( fdlClientID );
-    m_wClientID = new TextVar( pipelineMeta, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wClientID = new TextVar( variables, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     props.setLook( m_wClientID );
     m_wClientID.addModifyListener( lsMod );
     FormData fdClientID = new FormData();
@@ -322,7 +323,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlConnectionTimeout.left = new FormAttachment( 0, 0 );
     fdlConnectionTimeout.right = new FormAttachment( middle, -margin );
     wlConnectionTimeout.setLayoutData( fdlConnectionTimeout );
-    m_wTimeout = new TextVar( pipelineMeta, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wTimeout = new TextVar( variables, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     props.setLook( m_wTimeout );
     m_wTimeout.addModifyListener( lsMod );
     FormData fdConnectionTimeout = new FormData();
@@ -342,7 +343,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlQOS.left = new FormAttachment( 0, 0 );
     fdlQOS.right = new FormAttachment( middle, -margin );
     wlQOS.setLayoutData( fdlQOS );
-    m_wQOS = new TextVar( pipelineMeta, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wQOS = new TextVar( variables, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     props.setLook( m_wQOS );
     m_wQOS.addModifyListener( lsMod );
     FormData fdQOS = new FormData();
@@ -423,7 +424,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlLastWillMessage.left = new FormAttachment( 0, 0 );
     fdlLastWillMessage.right = new FormAttachment( middle, -margin );
     wlLastWillMessage.setLayoutData( fdlLastWillMessage );
-    m_wLastWillMessage = new TextVar( pipelineMeta, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wLastWillMessage = new TextVar( variables, wGeneralTabComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     props.setLook( m_wLastWillMessage );
     m_wLastWillMessage.addModifyListener( lsMod );
     FormData fdLastWillMessage = new FormData();
@@ -520,7 +521,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlUsername.top = new FormAttachment( lastControl, 2 * margin );
     m_wlUsername.setLayoutData( fdlUsername );
 
-    m_wUsername = new TextVar( pipelineMeta, wCredentialsComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wUsername = new TextVar( variables, wCredentialsComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     m_wUsername.setEnabled( false );
     m_wUsername.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
@@ -546,7 +547,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlPassword.top = new FormAttachment( lastControl, margin );
     m_wlPassword.setLayoutData( fdlPassword );
 
-    m_wPassword = new TextVar( pipelineMeta, wCredentialsComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER | SWT.PASSWORD );
+    m_wPassword = new TextVar( variables, wCredentialsComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER | SWT.PASSWORD );
     m_wPassword.setEnabled( false );
     m_wPassword.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
@@ -595,7 +596,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlCAFile.top = new FormAttachment( 0, 2 * margin );
     wlCAFile.setLayoutData( fdlCAFile );
 
-    m_wCAFile = new TextVar( pipelineMeta, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wCAFile = new TextVar( variables, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     m_wCAFile.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
             "MQTTClientDialog.CAFile.Tooltip" ) );
@@ -619,7 +620,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlCertFile.top = new FormAttachment( lastControl, margin );
     wlCertFile.setLayoutData( fdlCertFile );
 
-    m_wCertFile = new TextVar( pipelineMeta, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wCertFile = new TextVar( variables, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     m_wCertFile.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
             "MQTTClientDialog.CertFile.Tooltip" ) );
@@ -643,7 +644,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlKeyFile.top = new FormAttachment( lastControl, margin );
     wlKeyFile.setLayoutData( fdlKeyFile );
 
-    m_wKeyFile = new TextVar( pipelineMeta, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+    m_wKeyFile = new TextVar( variables, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
     m_wKeyFile.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
             "MQTTClientDialog.KeyFile.Tooltip" ) );
@@ -668,7 +669,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
     fdlKeyPassword.top = new FormAttachment( lastControl, margin );
     wlKeyPassword.setLayoutData( fdlKeyPassword );
 
-    m_wKeyPassword = new TextVar( pipelineMeta, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER | SWT.PASSWORD );
+    m_wKeyPassword = new TextVar( variables, wSSLComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER | SWT.PASSWORD );
     m_wKeyPassword.setToolTipText( BaseMessages
         .getString( MQTTPublisherMeta.PKG,
             "MQTTClientDialog.KeyPassword.Tooltip" ) );
@@ -763,7 +764,7 @@ public class MQTTPublisherDialog extends BaseTransformDialog implements ITransfo
   private IRowMeta getPreviousFields() {
     IRowMeta previousFields;
     try {
-      previousFields = pipelineMeta.getPrevTransformFields( transformMeta );
+      previousFields = pipelineMeta.getPrevTransformFields( variables, transformMeta );
     } catch ( HopTransformException e ) {
       new ErrorDialog( shell, BaseMessages
           .getString( MQTTPublisherMeta.PKG,
