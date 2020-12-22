@@ -11,7 +11,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <hop.version>0.50-SNAPSHOT</hop.version>
+    <hop.version>0.60-SNAPSHOT</hop.version>
     <paho.version>1.2.0</paho.version>
     <buildId>${maven.build.timestamp}</buildId>
     <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
