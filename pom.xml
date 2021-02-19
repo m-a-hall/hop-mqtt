@@ -5,13 +5,13 @@
   <groupId>org.phalanxdev</groupId>
   <artifactId>hop-mqtt</artifactId>
   <version>1.0</version>
-  <name>Streaming MQTT transforms  Apache Hop</name>
+  <name>MQTT plugins for Apache Hop</name>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <hop.version>0.60-SNAPSHOT</hop.version>
+    <hop.version>0.70-SNAPSHOT</hop.version>
     <paho.version>1.2.0</paho.version>
     <buildId>${maven.build.timestamp}</buildId>
     <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
@@ -32,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.hop</groupId>
-      <artifactId>hop-ui-swt</artifactId>
+      <artifactId>hop-ui</artifactId>
       <version>${hop.version}</version>
       <scope>provided</scope>
     </dependency>
